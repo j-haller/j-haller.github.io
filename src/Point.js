@@ -1,6 +1,6 @@
 // @prettier
 
-export class Vector {
+export default class Point {
     #x;
     #y;
 
