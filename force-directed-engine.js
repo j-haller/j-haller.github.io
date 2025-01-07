@@ -7,7 +7,7 @@ function updatePositions(vertices) {
         throw new Error(`Invalid parameter (${typeof vertices})`);
     }
 
-    vertices.forEach(vertex => {
+    vertices.forEach((vertex) => {
         vertex.x += vertex.vx;
         vertex.y += vertex.vy;
     });
@@ -22,7 +22,7 @@ function applyForces(vertices, edges) {
         throw new Error(`Invalid parameter (${typeof edges})`);
     }
 
-    vertices.forEach(vertex => {
+    vertices.forEach((vertex) => {
         applyRepulsiveForces(vertices, vertex);
         applyAttractionForces(edges, vertex);
         applyDamping(vertex);
@@ -35,7 +35,7 @@ function applyRepulsiveForces(vertices, vertexA) {
         throw new Error(`Invalid parameter (${typeof vertices})`);
     }
 
-    vertices.forEach(vertexB => {
+    vertices.forEach((vertexB) => {
         if (vertexA === vertexB) {
             return; // Skip self interaction
         }
@@ -74,6 +74,22 @@ function applyAttractionForces(edges, vertexA) {
 
         vertexA.vx += springForce * Math.cos(angle);
         vertexA.vy += springForce * Math.sin(angle);
+    });
+}
+
+function applyPointerAttractionForces(vertices, pointerLocation) {
+    if (pointerLocation === undefined) {
+        return;
+    }
+
+    vertices.forEach((vertex) => {
+        const distance = calculateDistance(vertex, pointerLocation);
+        const angle = calculateAngle(vertex, pointerLocation);
+
+        const springForce = (distance - 0) * 0.01;
+
+        vertex.vx += springForce * Math.cos(angle);
+        vertex.vy += springForce * Math.sin(angle);
     });
 }
 
