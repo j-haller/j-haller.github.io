@@ -36,7 +36,9 @@ function main() {
             if (vertexA === vertexB) {
                 return;
             }
-            edges.push([vertexA, vertexB]);
+            if (Math.random() > 0.5) {
+                edges.push([vertexA, vertexB]);
+            }
         });
     });
 
