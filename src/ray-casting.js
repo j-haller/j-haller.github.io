@@ -103,7 +103,7 @@ function isHorizontalRayFromPointIntersectingEdge(point, edge) {
     return intersectionX > point.x;
 }
 
-export function isInside(polygon, point) {
+export default function isInside(polygon, point) {
     const edges = getEdges(polygon);
     let intersections = 0;
 
