@@ -30,6 +30,7 @@ function main() {
         const x = width * Math.random();
         const y = height * Math.random();
         const vertex = new Vertex(x, y);
+        vertex.show();
         vertices.push(vertex);
         vertex.show();
     }

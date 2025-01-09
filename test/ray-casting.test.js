@@ -2,7 +2,7 @@
 
 import { strictEqual } from 'assert';
 import { Boundary } from '../src/Boundary.js';
-import { isInside } from '../src/ray-casting.js';
+import isInside from '../src/ray-casting.js';
 
 describe('ray-casting', () => {
     let polygon;
