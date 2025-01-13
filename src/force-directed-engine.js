@@ -1,11 +1,13 @@
-const stiffness = 0.001;
-const repulsion = 0.00001;
+// @prettier
+
+import Edge from './Edge.js';
+
+const stiffness = 0.01;
+const repulsion = 1000;
 const damping = 0.9;
 
-function updatePositions(vertices) {
-    if (!Array.isArray(vertices)) {
-        throw new Error(`Invalid parameter (${typeof vertices})`);
-    }
+export function updatePositions(vertices, edges) {
+    applyForces(vertices, edges);
 
     vertices.forEach((vertex) => {
         vertex.x += vertex.vx;
@@ -14,14 +16,6 @@ function updatePositions(vertices) {
 }
 
 function applyForces(vertices, edges) {
-    if (!Array.isArray(vertices)) {
-        throw new Error(`Invalid parameter (${typeof vertices})`);
-    }
-
-    if (!Array.isArray(edges)) {
-        throw new Error(`Invalid parameter (${typeof edges})`);
-    }
-
     vertices.forEach((vertex) => {
         applyRepulsiveForces(vertices, vertex);
         applyAttractionForces(edges, vertex);
@@ -31,10 +25,6 @@ function applyForces(vertices, edges) {
 
 // Apply repulsive force to a vertex from all other vertices
 function applyRepulsiveForces(vertices, vertexA) {
-    if (!Array.isArray(vertices)) {
-        throw new Error(`Invalid parameter (${typeof vertices})`);
-    }
-
     vertices.forEach((vertexB) => {
         if (vertexA === vertexB) {
             return; // Skip self interaction
@@ -52,11 +42,10 @@ function applyRepulsiveForces(vertices, vertexA) {
 
 // Apply spring attraction force between connected vertices
 function applyAttractionForces(edges, vertexA) {
-    if (!Array.isArray(edges)) {
-        throw new Error(`Invalid parameter (${typeof edges})`);
-    }
+    edges.forEach((edge) => {
+        const A = edge.pointA;
+        const B = edge.pointB;
 
-    edges.forEach(([A, B]) => {
         if (A != vertexA) {
             // if the first vertex is not vertexA, then skip
             return;
@@ -72,12 +61,15 @@ function applyAttractionForces(edges, vertexA) {
 
         const springForce = (distance - 150) * stiffness; // 150 is the desired spring length
 
+        edge.pointA = vertexA;
+        edge.pointB = vertexB;
+
         vertexA.vx += springForce * Math.cos(angle);
         vertexA.vy += springForce * Math.sin(angle);
     });
 }
 
-function applyPointerAttractionForces(vertices, pointerLocation) {
+export function applyPointerAttractionForce(vertices, pointerLocation) {
     if (pointerLocation === undefined) {
         return;
     }

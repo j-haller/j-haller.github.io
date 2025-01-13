@@ -1,3 +1,12 @@
+// @prettier
+
+import Vertex from './Vertex.js';
+import Edge from './Edge.js';
+import {
+    updatePositions,
+    applyPointerAttractionForce,
+} from './force-directed-engine.js';
+
 const height = window.innerHeight;
 const width = window.innerWidth;
 
@@ -6,9 +15,8 @@ const edges = [];
 let pointerLocation;
 
 function animate(timestamp, vertices, edges) {
-    applyForces(vertices, edges);
-    updatePositions(vertices);
-    applyPointerAttractionForces(vertices, pointerLocation);
+    applyPointerAttractionForce(vertices, pointerLocation);
+    updatePositions(vertices, edges);
 
     requestAnimationFrame((timestamp) => {
         animate(timestamp, vertices, edges);
@@ -16,18 +24,18 @@ function animate(timestamp, vertices, edges) {
 }
 
 function main() {
-    const canvas = document.getElementById("canvas");
-    canvas.addEventListener("pointermove", (event) => {
+    const canvas = document.getElementById('svg');
+    canvas.addEventListener('pointermove', (event) => {
         pointerLocation = new Vertex(event.clientX, event.clientY);
     });
 
     // Make some vertices
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 5; i++) {
         const x = width * Math.random();
         const y = height * Math.random();
         const vertex = new Vertex(x, y);
         vertices.push(vertex);
-        vertex.draw();
+        vertex.show();
     }
 
     // Make some edges
@@ -37,17 +45,13 @@ function main() {
                 return;
             }
             if (Math.random() > 0.5) {
-                edges.push([vertexA, vertexB]);
+                const edge = new Edge(vertexA, vertexB);
+                edges.push(edge);
             }
         });
     });
 
-    if (!Array.isArray(vertices)) {
-        throw new Error("Error: vertices is not an array");
-    }
-    if (!Array.isArray(edges)) {
-        throw new Error("Error: edges is not an array");
-    }
-
     animate(0, vertices, edges);
 }
+
+window.addEventListener('load', main);
