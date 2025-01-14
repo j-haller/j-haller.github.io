@@ -7,14 +7,19 @@ import {
     applyPointerAttractionForce,
 } from './force-directed-engine.js';
 
+type Point = {
+    x: number;
+    y: number;
+};
+
 const height = window.innerHeight;
 const width = window.innerWidth;
 
-const vertices = [];
-const edges = [];
-let pointerLocation;
+const vertices: Vertex[] = [];
+const edges: Edge[] = [];
+let pointerLocation: Point;
 
-function animate(timestamp, vertices, edges) {
+function animate(timestamp: number, vertices: Vertex[], edges: Edge[]) {
     applyPointerAttractionForce(vertices, pointerLocation);
     updatePositions(vertices, edges);
 
@@ -23,11 +28,19 @@ function animate(timestamp, vertices, edges) {
     });
 }
 
-function main() {
+function addPointerMoveEvent() {
     const canvas = document.getElementById('svg');
+    if (null === canvas) {
+        return;
+    }
+
     canvas.addEventListener('pointermove', (event) => {
         pointerLocation = new Vertex(event.clientX, event.clientY);
     });
+}
+
+function main() {
+    addPointerMoveEvent();
 
     // Make some vertices
     for (let i = 0; i < 5; i++) {
