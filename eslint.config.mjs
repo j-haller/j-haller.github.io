@@ -1,17 +1,9 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-    {
-        languageOptions: {
-            globals: globals.browser,
-        },
-        rules: {
-            complexity: ['error', { max: 2 }],
-            eqeqeq: ['error', 'always', { null: 'always' }],
-            curly: ['error', 'all'],
-        },
-    },
-    pluginJs.configs.recommended,
-];
+export default tseslint.config(
+  { ignores: ["lib"] },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...tseslint.configs.stylistic,
+);
